@@ -16,19 +16,33 @@ class NeuralNetwork():
     def predict(self,input):
         input = input.astype(float)
         p = np.dot(input,self.synaptic_weights)
-        r_output = self.sigmoid(p)
-        print(r_output)
+        r_output = self.sigmoid_func(p)
+        return r_output
 
     
     def train(self,input,output,interation):
+        print(neuralnetwork.synaptic_weights)
+
         for i in range(interation):
-            r_input = input.astype(float)
-            p = np.dot(r_input,self.synaptic_weights)
-            r_output = self.sigmoid_func(p)
+            # r_input = input.astype(float)
+            # # print(neuralnetwork.synaptic_weights)
+
+            # p = np.dot(r_input,self.synaptic_weights)
+            # # print(neuralnetwork.synaptic_weights)
+
+            r_output = self.predict(input)
+            print(r_output)
+            print("output")
+            # output =output.transpose
+            print(output)
 
             e = output - r_output
+            print("error")
+            print(e)
             delta = e*self.derivative_sigmoid(output)
+            weight_change = []
             weight_change = np.dot(input.T , e * self.derivative_sigmoid(r_output))
+            print(weight_change)
             self.synaptic_weights =  self.synaptic_weights + weight_change
 
 
@@ -39,18 +53,22 @@ if __name__ == "__main__":
     print(neuralnetwork.synaptic_weights)
 
     input = np.array([[0,0,1],[0,1,1],[1,0,1],[1,1,1]])
-    output = np.array([0,1,1,0]).T
-    neuralnetwork.train(input,output,1000)
-
+    
+    output = np.array([0,1,1,0])[np.newaxis]
+    output = output.T
+    
+    neuralnetwork.train(input,output,1)
+    #1d new weights, error resolved
     print("New synaptic weights:")
     print(neuralnetwork.synaptic_weights)
 
-    # input_one = str(input("Enter first input"))
-    # input_two = str(input("Enter second input"))
-    # input_third = str(input("Enter third input"))
+    #ndaray error below
+    # one = str(input("Enter first input"))
+    # two = str(input("Enter second input"))
+    # third = str(input("Enter third input"))
 
     # inputs = np.array([input_one,input_two,input_third])
-    # neuralnetwork.predict(inputs)
+    # print(neuralnetwork.predict(inputs))
 
 
 

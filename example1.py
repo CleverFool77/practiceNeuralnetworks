@@ -1,7 +1,10 @@
 import numpy as np
 
 class NeuralNetwork():
-    def __init__(self):
+    def __init__(self,x,y):
+        self.input = x
+        self.y = y
+        self.output = np.zeros(self.y.shape)
         np.random.seed(1)
         self.synaptic_weights = 2*np.random.random((3,1)) - 1
     
@@ -13,14 +16,13 @@ class NeuralNetwork():
         a = x*(1-x)
         return a
     
-    def predict(self,input):
-        input = input.astype(float)
-        p = np.dot(input,self.synaptic_weights)
-        r_output = self.sigmoid_func(p)
-        return r_output
+    def ff(self,input):
+        self.input = input.astype(float)
+        return self.sigmoid_func(np.dot(input,self.synaptic_weights))
+    
 
     
-    def train(self,input,output,interation):
+    def train(self,interation):
         print(neuralnetwork.synaptic_weights)
 
         for i in range(interation):
@@ -30,34 +32,35 @@ class NeuralNetwork():
             # p = np.dot(r_input,self.synaptic_weights)
             # # print(neuralnetwork.synaptic_weights)
 
-            r_output = self.predict(input)
-            print(r_output)
+            self.output = self.ff(self.input)
+            print(self.output)
             print("output")
             # output =output.transpose
             print(output)
 
-            e = output - r_output
+            e = self.y - self.output
             print("error")
             print(e)
-            delta = e*self.derivative_sigmoid(output)
-            weight_change = []
-            weight_change = np.dot(input.T , e * self.derivative_sigmoid(r_output))
-            print(weight_change)
+            # delta = e*self.derivative_sigmoid(output)
+
+            weight_change = np.dot(input.T , e * self.derivative_sigmoid(self.output))
+            # print(weight_change)
             self.synaptic_weights =  self.synaptic_weights + weight_change
 
 
 if __name__ == "__main__":
-    neuralnetwork = NeuralNetwork()
-
-    print("Random initial synaptic weights:")
-    print(neuralnetwork.synaptic_weights)
-
     input = np.array([[0,0,1],[0,1,1],[1,0,1],[1,1,1]])
     
     output = np.array([0,1,1,0])[np.newaxis]
     output = output.T
+    neuralnetwork = NeuralNetwork(input,output)
+
+    print("Random initial synaptic weights:")
+    print(neuralnetwork.synaptic_weights)
+
     
-    neuralnetwork.train(input,output,1)
+    
+    neuralnetwork.train(1000)
     #1d new weights, error resolved
     print("New synaptic weights:")
     print(neuralnetwork.synaptic_weights)
@@ -68,8 +71,8 @@ if __name__ == "__main__":
     # third = str(input("Enter third input"))
 
     # inputs = np.array([input_one,input_two,input_third])
-    # print(neuralnetwork.predict(inputs))
-
+    print("output")
+    print(neuralnetwork.ff(input))
 
 
 
